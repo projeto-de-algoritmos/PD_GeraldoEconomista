@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  web:
+    build: .
+    container_name: knapsack-api
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./src:/code/src
+      - ./server.py:/code/server.py
+    restart: on-failure
+    networks:
+      - knapsack
+    depends_on:
+      - mongo
+  mongo:
+    container_name: knapsack-db
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_DATABASE: knapsack
+    volumes:
+      - db_data:/data/db
+    logging:
+      driver: none
+    networks:
+      - knapsack
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    depends_on:
+      - mongo
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+    networks:
+      - knapsack
+
+volumes:
+  db_data:
+
+networks:
+  knapsack:
+    external: true
