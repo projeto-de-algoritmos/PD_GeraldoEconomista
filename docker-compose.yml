@@ -40,6 +40,14 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
     networks:
       - knapsack
+  frontend:
+    build: ./frontend
+    volumes:
+      - ./frontend:/frontend
+    ports:
+      - 8080:8080
+    networks:
+      - knapsack
 
 volumes:
   db_data:
