@@ -36,13 +36,21 @@
           </q-input>
 
           <q-input
+            v-model="imageUrl"
+            label="URL Imagem *"
+            :error="!imageUrl && !!fieldsErrors.imageUrl"
+          >
+            <template v-slot:error>{{ fieldsErrors.imageUrl }}</template>
+          </q-input>
+
+          <!-- <q-input
             v-model="quantity"
             label="Quantidade *"
             type="number"
             :error="!!fieldsErrors.quantity"
           >
             <template v-slot:error>{{ fieldsErrors.quantity }}</template>
-          </q-input>
+          </q-input> -->
         </q-form>
       </q-card-section>
 
@@ -81,6 +89,7 @@ export default {
       value: '',
       weight: '',
       quantity: '',
+      imageUrl: '',
       fieldsErrors: {},
     };
   },
@@ -94,12 +103,13 @@ export default {
       this.opened = true;
 
       if (this.edit) {
-        const { id, name, value, quantity, weight } = item;
+        const { id, name, value, quantity, weight, imageUrl } = item;
 
         this.id = id;
         this.name = name;
         this.value = value;
         this.weight = weight;
+        this.imageUrl = imageUrl;
         this.quantity = quantity;
       }
     },
@@ -130,10 +140,12 @@ export default {
         newErrors.weight = 'O peso é inválido, é esperado um número inteiro';
       }
 
-      if (!this.isValidInteger(this.quantity)) {
-        newErrors.quantity =
-          'A quantidade é inválida, é esperado um número inteiro';
-      }
+      if (!this.imageUrl) newErrors.imageUrl = 'O URL da imagem é obrigatório';
+
+      // if (!this.isValidInteger(this.quantity)) {
+      //   newErrors.quantity =
+      //     'A quantidade é inválida, é esperado um número inteiro';
+      // }
 
       this.fieldsErrors = { ...newErrors };
 
@@ -147,6 +159,7 @@ export default {
         value: this.value,
         weight: this.weight,
         quantity: this.quantity,
+        imageUrl: this.imageUrl,
       };
 
       if (this.edit) {
@@ -164,6 +177,7 @@ export default {
       this.value = '';
       this.weight = '';
       this.quantity = '';
+      this.imageUrl = '';
       this.fieldsErrors = {};
     },
   },

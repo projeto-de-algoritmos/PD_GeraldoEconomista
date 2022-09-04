@@ -42,6 +42,15 @@
           </q-btn>
         </template>
 
+        <template v-slot:body-cell-imageUrl="props">
+          <q-td :props="props">
+            <q-img
+              style="width: 32px; height: 32px"
+              :src="props.row.imageUrl"
+            />
+          </q-td>
+        </template>
+
         <template v-slot:body-cell-actions="props">
           <q-td :props="props">
             <q-btn
@@ -139,12 +148,19 @@ export default {
           field: 'weight',
         },
         {
-          name: 'quantity',
-          label: 'Quantidade',
+          name: 'imageUrl',
+          label: 'Imagem',
           align: 'left',
           required: true,
-          field: 'quantity',
+          field: 'imageUrl',
         },
+        // {
+        //   name: 'quantity',
+        //   label: 'Quantidade',
+        //   align: 'left',
+        //   required: true,
+        //   field: 'quantity',
+        // },
         { name: 'actions', label: 'Ações', align: 'right' },
       ],
     };
