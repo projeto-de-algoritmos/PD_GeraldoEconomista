@@ -1,5 +1,5 @@
 <template>
-  <q-item clickable tag="a" target="_blank" :href="link">
+  <q-item clickable @click="() => $router.push({ name: routeName })">
     <q-item-section v-if="icon" avatar>
       <q-icon :name="icon" />
     </q-item-section>
@@ -27,9 +27,9 @@ export default {
       default: '',
     },
 
-    link: {
+    routeName: {
       type: String,
-      default: '#',
+      default: '/',
     },
 
     icon: {
