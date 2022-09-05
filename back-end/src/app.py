@@ -5,6 +5,7 @@ from flask_mongoengine import MongoEngine
 from .config import MONGO_SETTINGS
 from .model.item import Item
 from .resources.items import Items
+from .resources.knapsack import Knapsack
 
 def create_app():
     """
@@ -17,6 +18,7 @@ def create_app():
     api = Api(app)
 
     api.add_resource(Items, "/items", "/items/<string:name>")
+    api.add_resource(Knapsack, "/knapsack")
 
     db = MongoEngine(app)
 
