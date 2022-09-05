@@ -139,6 +139,7 @@ export default {
           align: 'left',
           required: true,
           field: 'value',
+          format: (val) => `${val} orens`,
         },
         {
           name: 'weight',
@@ -146,6 +147,7 @@ export default {
           align: 'left',
           required: true,
           field: 'weight',
+          format: (val) => `${val} kg`,
         },
         {
           name: 'imageUrl',

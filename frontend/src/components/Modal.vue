@@ -156,10 +156,10 @@ export default {
 
       const newItem = {
         name: this.name,
-        value: this.value,
-        weight: this.weight,
         quantity: this.quantity,
         imageUrl: this.imageUrl,
+        value: parseInt(this.value, 10),
+        weight: Math.round(this.weight * 100) / 100,
       };
 
       if (this.edit) {
