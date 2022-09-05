@@ -5,13 +5,16 @@ from flask import request
 from src.resources.utils import simple_error_response
 from flask_restful import Resource
 
-
 DUPLICATED_ITEM_MSG = "The Item name is already in use"
 
 class Items(Resource):
     def get(self, name=None):
         if name is None:
             return [item.to_json() for item in Item.objects]
+
+        item, json_msg = Item.get_item(item)
+
+        return self.__create_get_response(item, json_msg)
 
     def post(self):
         data = request.get_json(force=True)
@@ -21,7 +24,7 @@ class Items(Resource):
                 name=data.get("name", None),
                 weight=data["weight"],
                 value=data["value"],
-                quantity=data["quantity"],
+                image_url=data["image_url"]
             )
 
             item.save()
@@ -32,21 +35,6 @@ class Items(Resource):
 
         return item.to_json(), requests.codes.created
 
-    def __show(self, name):
-        item, json_msg = self.get_item(name)
-
+    def __create_get_response(self, item, json_msg):
         if item is None:
             return simple_error_response(json_msg, requests.codes.not_found)
-
-        return item.to_json(), requests.codes.ok
-
-    def __get_item(self, name):
-        item = Item.objects(name__exac=name)
-
-        if item is None:
-            return None, f"There is no items with name {name}"
-
-        if item.quantity <= 0:
-            return None, f"There aren't available items {name}"
-
-        return item, None

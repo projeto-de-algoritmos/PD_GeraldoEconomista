@@ -3,9 +3,9 @@ import mongoengine as me
 class Item(me.Document):
 
     name = me.StringField(unique=True)
-    weight = me.DecimalField(precision=1)
-    value = me.DecimalField(precision=1)
-    quantity = me.IntField()
+    weight = me.IntField()
+    value = me.IntField()
+    image_url = me.StringField()
 
     def __str__(self):
         return f"Name={self.name}\nWeight={self.weight}\nValue={self.value}\nQuantity={self.quantity}\nUsed={self.qtd_used}"
@@ -13,7 +13,16 @@ class Item(me.Document):
     def to_json(self):
         return {
             "name": self.name,
-            "weight": float(self.weight),
-            "value": float(self.value),
-            "quantity": self.quantity
+            "weight": int(self.weight),
+            "value": int(self.value),
+            "image_url": self.image_url
         }
+
+    @staticmethod
+    def get_item(name):
+        item = Item.objects(name__exact=name).first()
+
+        if item is None:
+            return None, f"There are no items with the name {name}"
+
+        return item, None
