@@ -4,5 +4,5 @@ ENV PYTHONPATH=/code
 WORKDIR /code
 COPY requirements.txt ./
 RUN pip3 install -r requirements.txt
-COPY .. ./
+COPY . ./
 CMD python3 server.py
