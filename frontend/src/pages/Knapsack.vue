@@ -88,7 +88,7 @@
             <div class="flex items-center">
               <q-input
                 v-model="capacity"
-                label="Capacidade mochila"
+                label="Capacidade mochila (g)"
                 type="number"
                 :error="!capacity"
               >
@@ -140,12 +140,12 @@
               <div class="flex column q-mt-lg">
                 <span class="text-subtitle1">
                   <strong>Valor total:</strong>
-                  {{ calcTotalByKey(knapsackItems, 'value') }}
+                  {{ knapsackTotalValue }}
                 </span>
 
                 <span class="text-subtitle1">
                   <strong>Peso total:</strong>
-                  {{ calcTotalByKey(knapsackItems, 'weight') }}
+                  {{ knapsackTotalWeight }}
                 </span>
               </div>
             </div>
@@ -173,15 +173,19 @@
 </style>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import Item from 'src/components/Item.vue';
+
+import { assembleKnapsack } from 'src/store/app/actions';
 
 export default {
   name: 'PageKnapsack',
   components: { Item },
   created() {
-    this.selectedItems = [...this.items];
-    this.knapsackItems = new Array(this.items.length).fill(null);
+    this.fetchItems().then(() => {
+      this.selectedItems = [...this.items];
+      this.knapsackItems = new Array(this.items.length).fill(null);
+    });
   },
   mounted() {
     this.$q.lang.table.recordsPerPage = 'Registros por páginas';
@@ -205,6 +209,8 @@ export default {
       done1: false,
       done2: false,
       capacity: 170,
+      knapsackTotalValue: 0,
+      knapsackTotalWeight: 0,
       knapsackItems: [],
       selectedItems: [],
       pagination: {
@@ -232,7 +238,7 @@ export default {
           align: 'left',
           required: true,
           field: 'weight',
-          format: (val) => `${val} kg`,
+          format: (val) => `${val} g`,
         },
         {
           name: 'imageUrl',
@@ -245,8 +251,23 @@ export default {
     };
   },
   methods: {
+    ...mapActions({
+      fetchItems: 'app/getItems',
+    }),
     setKnapsack() {
-      console.log('opa');
+      assembleKnapsack({
+        capacity: parseInt(this.capacity, 10),
+        items: this.selectedItems.map(({ name }) => ({ name, quantity: 1 })),
+      }).then((data) => {
+        const diff = Math.abs(data.solution.length - this.selectedItems.length);
+
+        this.knapsackItems = [
+          ...data.solution,
+          ...(diff > 0 ? new Array(diff).fill(null) : []),
+        ];
+        this.knapsackTotalValue = data.result;
+        this.knapsackTotalWeight = data.weight;
+      });
     },
     calcTotalByKey(list, key) {
       let sum = 0;

@@ -8,7 +8,7 @@
       <q-badge :label="`${item.value} $`" color="accent" class="value-badge" />
 
       <q-badge
-        :label="`${item.weight} kg`"
+        :label="`${item.weight} g`"
         color="secondary"
         class="weight-badge"
       />

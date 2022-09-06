@@ -81,7 +81,7 @@ export const editItem = async ({ dispatch }, { itemId, data }) => {
 
 export const assembleKnapsack = async (data) => {
   try {
-    return await patch('/knapsack', data);
+    return await post('/knapsack', data);
   } catch {
     Notify.create({
       message: 'Falha ao montar a mochila',
