@@ -11,6 +11,8 @@
 ## Sobre
 O software é inspirado no inventário do jogo The Witcher e tem como objetivo auxiliar o jogador a escolher quais são os melhores itens que cabem em seu inventário levando em consideração os itens do usuário e o limite de peso do seu inventário.
 
+O vídeo da apresentação pode ser encontrado clicando [aqui](https://github.com/projeto-de-algoritmos/PD_GeraldoEconomista/blob/main/apresentacao.mp4?raw=true).
+
 ## Screenshots
 
 ### Tela de gerência dos itens
