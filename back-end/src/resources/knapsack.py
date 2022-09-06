@@ -9,6 +9,7 @@ from src.resources.utils import simple_error_response
 class Knapsack(Resource):
 
     def post(self):
+
         request_data = request.get_json(force=True)
 
         request_items = request_data['items']
@@ -17,26 +18,85 @@ class Knapsack(Resource):
 
         for item in request_items:
             for i in range(0, item['quantity']):
-                item_info, json_msg = Item.get_item(item['name'])
+                item_info, json_msg = Item.get_by_name(item['name'])
 
                 if item_info is None:
                     return simple_error_response(json_msg, requests.codes.not_found)
 
                 items.append(item_info)
 
-        return self.__knapsack(request_data['capacity'], items, len(items))
+        return self.__knapsack(items, request_data['capacity'], len(items))
+
+    def __knapsack(self, items, capacity, n):
+
+        global memoization
+
+        memoization = [[-1 for i in range(capacity + 1)] for j in range(n + 1)]
+
+        result = self.__knapsack_calc(items, capacity, n);
+
+        solution = self.__find_solution(items, capacity, n, result)
+
+        total_weight = 0
+
+        final_solution = []
+
+        for item in solution:
+            total_weight += item.weight
+            final_solution.append(item.to_json())
+
+        response = {
+            "result": result,
+            "weight": total_weight,
+            "solution": final_solution
+        }
+
+        return response, requests.codes
 
 
+    def __knapsack_calc(self, items, capacity, n):
+        global memoization
 
-    def __knapsack(self, knapsack_capacity, items, n):
-        memoization = [0 for _ in range(knapsack_capacity + 1)]
+        if n == 0 or capacity == 0:
+            return 0
 
-        for i in range(1, n + 1):
-            for w in range(knapsack_capacity, 0, -1):
-                if items[i - 1].weight <= w:
-                    memoization[w] = max(memoization[w], memoization[w - items[i - 1].weight] + items[i - 1].value)
+        if memoization[n][capacity] != -1:
+            return memoization[n][capacity]
 
-        return memoization[knapsack_capacity]  # returning the maximum value of knapsack
+        if items[n-1].weight <= capacity:
+
+            memoization[n][capacity] = max(
+                float(items[n-1].value) + self.__knapsack_calc(items, capacity - items[n-1].weight, n-1),
+                self.__knapsack_calc(items, capacity, n-1)
+            )
+
+            return memoization[n][capacity]
+
+        elif items[n-1].weight > capacity:
+
+            memoization[n][capacity] = self.__knapsack_calc(items, capacity, n-1)
+
+            return memoization[n][capacity]
+
+    def __find_solution(self, items, capacity, n, result):
+        global memoization
+
+        solution = []
+
+        for i in range(n, 0, -1):
+
+            if result <= 0:
+                break
+
+            if result == memoization[i - 1][capacity]:
+                continue
+
+            else:
+                solution.append(items[i - 1])
+                result -= float(items[i - 1].value)
+                capacity -= items[i - 1].weight
+
+        return solution
 
 
 # # teste
@@ -49,6 +109,6 @@ class Knapsack(Resource):
 
 # print(items[0].weight)
 
-# knapsack_capacity = 50
+# capacity = 50
 # n = len(items)
-# print(knapsack(knapsack_capacity, items, n))
+# print(knapsack(capacity, items, n))
