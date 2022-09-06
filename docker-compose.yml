@@ -1,13 +1,13 @@
 version: "3.8"
 services:
   web:
-    build: .
+    build: ./back-end
     container_name: knapsack-api
     ports:
       - "5000:5000"
     volumes:
-      - ./src:/code/src
-      - ./server.py:/code/server.py
+      - ./back-end/src:/code/src
+      - ./back-end/server.py:/code/server.py
     restart: on-failure
     networks:
       - knapsack
