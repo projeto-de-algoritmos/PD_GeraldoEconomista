@@ -1,5 +1,6 @@
 **
-!/src/**
+!back-end/src/**
+!.idea
 !server.py
 !requirements.txt
 
