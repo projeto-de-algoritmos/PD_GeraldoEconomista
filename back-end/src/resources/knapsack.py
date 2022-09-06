@@ -6,26 +6,26 @@ from flask import request
 from flask_restful import Resource
 from src.resources.utils import simple_error_response
 
-class Knapsack(Resource):
 
+class Knapsack(Resource):
     def post(self):
 
         request_data = request.get_json(force=True)
 
-        request_items = request_data['items']
+        request_items = request_data["items"]
 
         items = []
 
         for item in request_items:
-            for i in range(0, item['quantity']):
-                item_info, json_msg = Item.get_by_name(item['name'])
+            for i in range(0, item["quantity"]):
+                item_info, json_msg = Item.get_by_name(item["name"])
 
                 if item_info is None:
                     return simple_error_response(json_msg, requests.codes.not_found)
 
                 items.append(item_info)
 
-        return self.__knapsack(items, request_data['capacity'], len(items))
+        return self.__knapsack(items, request_data["capacity"], len(items))
 
     def __knapsack(self, items, capacity, n):
 
@@ -33,7 +33,7 @@ class Knapsack(Resource):
 
         memoization = [[-1 for i in range(capacity + 1)] for j in range(n + 1)]
 
-        result = self.__knapsack_calc(items, capacity, n);
+        result = self.__knapsack_calc(items, capacity, n)
 
         solution = self.__find_solution(items, capacity, n, result)
 
@@ -48,11 +48,10 @@ class Knapsack(Resource):
         response = {
             "result": result,
             "weight": total_weight,
-            "solution": final_solution
+            "solution": final_solution,
         }
 
         return response, requests.codes
-
 
     def __knapsack_calc(self, items, capacity, n):
         global memoization
@@ -63,18 +62,19 @@ class Knapsack(Resource):
         if memoization[n][capacity] != -1:
             return memoization[n][capacity]
 
-        if items[n-1].weight <= capacity:
+        if items[n - 1].weight <= capacity:
 
             memoization[n][capacity] = max(
-                float(items[n-1].value) + self.__knapsack_calc(items, capacity - items[n-1].weight, n-1),
-                self.__knapsack_calc(items, capacity, n-1)
+                float(items[n - 1].value)
+                + self.__knapsack_calc(items, capacity - items[n - 1].weight, n - 1),
+                self.__knapsack_calc(items, capacity, n - 1),
             )
 
             return memoization[n][capacity]
 
-        elif items[n-1].weight > capacity:
+        elif items[n - 1].weight > capacity:
 
-            memoization[n][capacity] = self.__knapsack_calc(items, capacity, n-1)
+            memoization[n][capacity] = self.__knapsack_calc(items, capacity, n - 1)
 
             return memoization[n][capacity]
 
