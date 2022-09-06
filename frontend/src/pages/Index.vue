@@ -22,6 +22,16 @@
             <q-tooltip>Montar mochila</q-tooltip>
           </q-btn>
 
+          <q-btn
+            color="accent"
+            icon-right="add_circle"
+            no-caps
+            @click="populateItems"
+            v-if="items.length === 0"
+          >
+            <q-tooltip>Popular com itens</q-tooltip>
+          </q-btn>
+
           <!-- <q-btn
             color="negative"
             icon-right="delete_forever"
@@ -104,6 +114,7 @@
 import { mapGetters, mapActions } from 'vuex';
 
 import FormModal from 'components/Modal.vue';
+import itemsJson from 'assets/itemsSeed';
 
 export default {
   name: 'PageIndex',
@@ -150,7 +161,7 @@ export default {
           align: 'left',
           required: true,
           field: 'weight',
-          format: (val) => `${val} kg`,
+          format: (val) => `${val} g`,
         },
         {
           name: 'imageUrl',
@@ -180,6 +191,23 @@ export default {
     }),
     openModal(item = null) {
       this.$refs.formModal.open(item);
+    },
+    populateItems() {
+      const promisses = itemsJson.map((item) =>
+        this.addItem({
+          ...item,
+          weight: parseInt(item.weight * 1000, 10),
+          value: parseFloat(item.value),
+        }),
+      );
+
+      Promise.all(promisses).then(() =>
+        this.$q.notify({
+          message: 'Itens adicionados com sucesso!',
+          type: 'positive',
+          position: 'top-right',
+        }),
+      );
     },
     deleteItem(itemId) {
       this.$q
