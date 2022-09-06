@@ -24,6 +24,7 @@ export const addItem = async ({ dispatch }, item) => {
     Notify.create({
       message: 'Item adicionado com sucesso!',
       type: 'positive',
+      position: 'top-right',
     });
   } catch {
     Notify.create({
