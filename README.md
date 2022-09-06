@@ -12,7 +12,18 @@
 O software é inspirado no inventário do jogo The Witcher e tem como objetivo auxiliar o jogador a escolher quais são os melhores itens que cabem em seu inventário levando em consideração os itens do usuário e o limite de peso do seu inventário.
 
 ## Screenshots
-Adicione 3 ou mais screenshots do projeto em funcionamento.
+
+### Tela de gerência dos itens
+![management](screenshots/Screenshot_1.png)
+
+### Modal de criação de novo item
+![new_item](screenshots/Screenshot_2.png)
+
+### Página de seleção de itens para a mochila
+![knapsack_choosing](screenshots/Screenshot_3.png)
+
+### Página de resultado das mochilas
+![knapsack_result](screenshots/Screenshot_4.png)
 
 ## Instalação
 **Linguagem**: Javascript (frontend) e Python (backend)<br>
