@@ -10,11 +10,11 @@ DUPLICATED_ITEM_MSG = "The Item name is already in use"
 class Items(Resource):
     def get(self, name=None):
         if name is None:
-            return [item.to_json() for item in Item.objects]
+            return [item.to_json() for item in Item.objects], requests.codes.ok
 
-        item, json_msg = Item.get_item(item)
+        item, json_msg = Item.get_by_name(name)
 
-        return self.__create_get_response(item, json_msg)
+        return self.__create_response(item, json_msg, requests.codes.ok)
 
     def post(self):
         data = request.get_json(force=True)
@@ -35,6 +35,29 @@ class Items(Resource):
 
         return item.to_json(), requests.codes.created
 
-    def __create_get_response(self, item, json_msg):
+
+    def patch(self, name):
+        item, json_msg = Item.get_by_name(name)
+
+        item_data = request.get_json(force=True)
+
+        item.update(**item_data)
+
+        item.reload()
+
+        return self.__create_response(item, json_msg, requests.codes.ok)
+
+    def delete(self, name):
+        item, json_msg = Item.get_by_name(name)
+
         if item is None:
-            return simple_error_response(json_msg, requests.codes.not_found)
+            return self.__create_response(item, json_msg, requests.codes.not_found)
+
+        Item.delete(item)
+
+
+    def __create_response(self, item, json_msg, response_code):
+        if item is None:
+            return simple_error_response(json_msg, response_code)
+
+        return item.to_json(), response_code
