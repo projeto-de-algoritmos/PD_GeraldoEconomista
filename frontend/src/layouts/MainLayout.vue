@@ -45,16 +45,16 @@ import EssentialLink from 'components/EssentialLink.vue';
 
 const linksData = [
   {
-    title: 'Home',
-    caption: 'Página inicial',
-    icon: 'home',
-    routeName: 'Home',
-  },
-  {
     title: 'Definição mochila',
     caption: 'Seleção dos itens para a mochila',
     icon: 'backpack',
     routeName: 'Knapsack',
+  },
+  {
+    title: 'Itens',
+    caption: 'Gerência de itens',
+    icon: 'add',
+    routeName: 'ItemsManagement',
   },
 ];
 

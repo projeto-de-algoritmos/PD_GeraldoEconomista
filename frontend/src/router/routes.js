@@ -3,11 +3,15 @@ const routes = [
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { path: '', name: 'Home', component: () => import('pages/Index.vue') },
       {
-        path: '/knapsack',
+        path: '',
         name: 'Knapsack',
         component: () => import('pages/Knapsack.vue'),
+      },
+      {
+        path: '',
+        name: 'ItemsManagement',
+        component: () => import('pages/ItemsManagement.vue'),
       },
     ],
   },

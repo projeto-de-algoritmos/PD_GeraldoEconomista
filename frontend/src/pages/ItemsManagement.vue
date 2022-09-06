@@ -117,7 +117,7 @@ import FormModal from 'components/Modal.vue';
 import itemsJson from 'assets/itemsSeed';
 
 export default {
-  name: 'PageIndex',
+  name: 'ItemsManagement',
   components: {
     FormModal,
   },
