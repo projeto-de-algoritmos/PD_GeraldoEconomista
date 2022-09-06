@@ -156,14 +156,14 @@ export default {
 
       const newItem = {
         name: this.name,
-        quantity: this.quantity,
+        // quantity: this.quantity,
         imageUrl: this.imageUrl,
         value: parseInt(this.value, 10),
         weight: Math.round(this.weight * 100) / 100,
       };
 
       if (this.edit) {
-        this.editItem({ itemId: this.id, data: newItem });
+        this.editItem({ itemId: this.name, data: newItem });
       } else {
         this.addItem({ ...newItem, id: uuidv4() });
       }

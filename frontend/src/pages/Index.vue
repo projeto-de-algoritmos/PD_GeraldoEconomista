@@ -22,14 +22,14 @@
             <q-tooltip>Montar mochila</q-tooltip>
           </q-btn>
 
-          <q-btn
+          <!-- <q-btn
             color="negative"
             icon-right="delete_forever"
             no-caps
             @click="deleteAll"
           >
             <q-tooltip>Apagar todos os itens</q-tooltip>
-          </q-btn>
+          </q-btn> -->
 
           <q-btn
             color="primary"
@@ -70,7 +70,7 @@
               no-caps
               flat
               dense
-              @click="deleteItem(props.row.id)"
+              @click="deleteItem(props.row.name)"
             >
               <q-tooltip>Remover este item</q-tooltip>
             </q-btn>
@@ -109,6 +109,9 @@ export default {
   name: 'PageIndex',
   components: {
     FormModal,
+  },
+  created() {
+    this.fetchItems();
   },
   mounted() {
     this.$q.lang.table.recordsPerPage = 'Registros por páginas';
@@ -169,10 +172,11 @@ export default {
   },
   methods: {
     ...mapActions({
+      fetchItems: 'app/getItems',
       addItem: 'app/addItem',
       editItem: 'app/editItem',
       removeItem: 'app/removeItem',
-      deleteAll: 'app/deleteAll',
+      // deleteAll: 'app/deleteAll',
     }),
     openModal(item = null) {
       this.$refs.formModal.open(item);

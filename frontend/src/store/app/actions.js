@@ -1,45 +1,93 @@
-export const addItem = ({ commit, rootState }, item) => {
-  const { items } = rootState.app;
+import { Notify } from 'quasar';
+import { get, post, httpDelete, patch } from '../../service/api';
 
-  const newItems = [...items, item];
+export const getItems = async ({ commit }) => {
+  try {
+    const response = await get('/items');
 
-  commit('setItems', newItems);
+    commit('setItems', response);
+  } catch {
+    Notify.create({
+      message: 'Falha ao buscar os itens',
+      type: 'negative',
+      position: 'top-right',
+    });
+  }
 };
 
-export const removeItem = ({ commit, rootState }, itemId) => {
-  const { items } = rootState.app;
+export const addItem = async ({ dispatch }, item) => {
+  try {
+    await post('/items', item);
 
-  const newItems = [...items];
+    dispatch('getItems');
 
-  const idx = newItems.findIndex((item) => item.id === itemId);
-
-  if (idx < 0) return;
-
-  newItems.splice(idx, 1);
-
-  commit('setItems', newItems);
+    Notify.create({
+      message: 'Item adicionado com sucesso!',
+      type: 'positive',
+    });
+  } catch {
+    Notify.create({
+      message: 'Falha ao cadastrar o item',
+      type: 'negative',
+      position: 'top-right',
+    });
+  }
 };
 
-export const editItem = ({ commit, rootState }, { itemId, data }) => {
-  const { items } = rootState.app;
+export const removeItem = async ({ dispatch }, itemId) => {
+  try {
+    await httpDelete(`/items/${itemId}`);
 
-  const newItems = [...items];
+    dispatch('getItems');
 
-  const idx = newItems.findIndex((item) => item.id === itemId);
-
-  if (idx < 0) return;
-
-  newItems[idx] = { ...newItems[idx], ...data };
-
-  commit('setItems', newItems);
+    Notify.create({
+      message: 'Item removido com sucesso!',
+      type: 'positive',
+      position: 'top-right',
+    });
+  } catch {
+    Notify.create({
+      message: 'Falha ao remover o item',
+      type: 'negative',
+      position: 'top-right',
+    });
+  }
 };
 
-export const getItem = ({ rootState }, itemId) => {
-  const { items } = rootState.app;
+export const editItem = async ({ dispatch }, { itemId, data }) => {
+  try {
+    await patch(`/items/${itemId}`, data);
 
-  return items.find((item) => item.id === itemId);
+    dispatch('getItems');
+
+    Notify.create({
+      message: 'Item editado com sucesso!',
+      type: 'positive',
+      position: 'top-right',
+    });
+  } catch {
+    Notify.create({
+      message: 'Falha ao editar o item',
+      type: 'negative',
+      position: 'top-right',
+    });
+  }
 };
 
-export const deleteAll = ({ commit }) => {
-  commit('setItems', []);
+// export const deleteAll = ({ commit }) => {
+//   commit('setItems', []);
+// };
+
+export const assembleKnapsack = async (data) => {
+  try {
+    return await patch('/knapsack', data);
+  } catch {
+    Notify.create({
+      message: 'Falha ao montar a mochila',
+      type: 'negative',
+      position: 'top-right',
+    });
+
+    return null;
+  }
 };
