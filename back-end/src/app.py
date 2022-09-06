@@ -6,12 +6,15 @@ from .config import MONGO_SETTINGS
 from .model.item import Item
 from .resources.items import Items
 from .resources.knapsack import Knapsack
+from flask_cors import CORS
 
 def create_app():
     """
     Create the Flask app
     """
     app = Flask(__name__)
+
+    CORS(app)
 
     app.config["MONGODB_SETTINGS"] = MONGO_SETTINGS
 
