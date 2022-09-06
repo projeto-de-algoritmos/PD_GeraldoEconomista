@@ -1,18 +1,19 @@
 import mongoengine as me
 
+
 class Item(me.Document):
 
     name = me.StringField(unique=True)
     weight = me.IntField()
     value = me.DecimalField(precision=2)
-    image_url = me.StringField()
+    imageUrl = me.StringField()
 
     def to_json(self):
         return {
             "name": self.name,
             "weight": self.weight,
             "value": float(self.value),
-            "image_url": self.image_url
+            "imageUrl": self.imageUrl,
         }
 
     @staticmethod
@@ -25,4 +26,4 @@ class Item(me.Document):
         return item, None
 
     def __str__(self):
-        return f"Name={self.name}\nWeight={self.weight}\nValue={self.value}\nImageUrl={self.image_url}"
+        return f"Name={self.name}\nWeight={self.weight}\nValue={self.value}\nImageUrl={self.imageUrl}"

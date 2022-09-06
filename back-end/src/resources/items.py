@@ -7,6 +7,7 @@ from flask_restful import Resource
 
 DUPLICATED_ITEM_MSG = "The Item name is already in use"
 
+
 class Items(Resource):
     def get(self, name=None):
         if name is None:
@@ -24,7 +25,7 @@ class Items(Resource):
                 name=data.get("name", None),
                 weight=data["weight"],
                 value=data["value"],
-                image_url=data["image_url"]
+                imageUrl=data["imageUrl"],
             )
 
             item.save()
@@ -34,7 +35,6 @@ class Items(Resource):
             )
 
         return item.to_json(), requests.codes.created
-
 
     def patch(self, name):
         item, json_msg = Item.get_by_name(name)
@@ -54,7 +54,6 @@ class Items(Resource):
             return self.__create_response(item, json_msg, requests.codes.not_found)
 
         Item.delete(item)
-
 
     def __create_response(self, item, json_msg, response_code):
         if item is None:
