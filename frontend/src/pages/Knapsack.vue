@@ -208,7 +208,7 @@ export default {
       knapsackItems: [],
       selectedItems: [],
       pagination: {
-        rowsPerPage: 25,
+        rowsPerPage: 15,
       },
       columns: [
         {

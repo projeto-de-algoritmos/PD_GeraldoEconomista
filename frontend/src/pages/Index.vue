@@ -123,7 +123,7 @@ export default {
   data() {
     return {
       pagination: {
-        rowsPerPage: 10,
+        rowsPerPage: 15,
       },
       columns: [
         {

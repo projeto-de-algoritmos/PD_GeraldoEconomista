@@ -1,7 +1,9 @@
 <template>
   <div class="item">
     <div v-if="!!item">
-      <q-img style="width: 32px; height: 32px" :src="item.imageUrl" />
+      <q-img style="width: 32px; height: 32px" :src="item.imageUrl">
+        <q-tooltip content-class="text-body2">{{ item.name }}</q-tooltip>
+      </q-img>
 
       <q-badge :label="`${item.value} $`" color="accent" class="value-badge" />
 
