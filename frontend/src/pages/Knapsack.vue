@@ -153,7 +153,7 @@
         </div>
 
         <q-stepper-navigation class="q-pa-none">
-          <q-btn @click="step = 1" color="primary" label="Back" />
+          <q-btn @click="step = 1" color="primary" label="Voltar" />
         </q-stepper-navigation>
       </q-step>
     </q-stepper>
@@ -168,7 +168,7 @@
 .items-container {
   width: 45%;
   height: fit-content;
-  max-width: 400px;
+  max-width: 500px;
 }
 </style>
 
